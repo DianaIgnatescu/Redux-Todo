@@ -1,17 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
+import { createLogger } from 'redux-logger';
+import reducer from './reducers';
+import * as actions from './actions';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-const store = createStore(reducer,
-  // eslint-disable-next-line no-underscore-dangle
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const logger = createLogger({
+  collapsed: true,
+});
+
+const store = createStore(
+  reducer,
+  applyMiddleware(logger),
+);
+
+store.dispatch(actions.addToDo('item1'));
+store.dispatch(actions.addToDo('item2'));
+// store.dispatch(actions.markComplete(1));
+// store.dispatch(actions.toggleComplete(2));
+// store.dispatch(actions.toggleComplete(3));
+// store.dispatch(actions.toggleIncomplete(1));
+
 
 ReactDOM.render(
-  <Provider>
+  <Provider store={store}>
     <App />
   </Provider>,
   document.getElementById('root'),
