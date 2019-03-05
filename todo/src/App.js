@@ -1,28 +1,32 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prefer-stateless-function */
+import React from 'react';
+import { connect } from 'react-redux';
+import {
+  addTodo, markComplete, markIncomplete, deleteCompleted, deleteTodo,
+} from './actions';
+import TodoForm from './components/TodoForm';
+import TodoList from './components/TodoList';
 import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.dddd
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
-}
+const App = props => (
+  <div className="App">
+    <h1>To Do List</h1>
+    <TodoForm addTodo={props.addTodo} />
+    <TodoList
+      markComplete={props.markComplete}
+      markIncomplete={props.markIncomplete}
+      todos={props.todos}
+      deleteCompleted={props.deleteCompleted}
+      deleteTodo={props.deleteTodo}
+    />
+  </div>
+);
 
-export default App;
+const mapStateToProps = state => ({
+  todos: state.todos,
+});
+
+export default connect(mapStateToProps, {
+  addTodo, markComplete, markIncomplete, deleteCompleted, deleteTodo,
+})(App);
